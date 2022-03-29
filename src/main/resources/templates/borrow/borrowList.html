@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div>
+        <div>
+            <form th:object="${borrowSearch}" class="form-inline">
+                <div class="form-group mb-2">
+                    <input type="text" th:field="*{userId}" class="form-control" placeholder="회원 ID"/>
+                </div>
+                <div class="form-group mx-sm-1 mb-2">
+                    <select th:field="*{borrowStatus}" class="form-control">
+                        <option value="">대여상태</option>
+                        <option th:each=
+                                        "status : ${T(library.books.domain.BorrowStatus).values()}"
+                                th:value="${status}"
+                                th:text="${status}">option
+                        </option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">검색</button>
+            </form>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>회원 ID</th>
+                <th>회원명</th>
+                <th>대표도서 ISBN</th>
+                <th>대표도서 이름</th>
+                <th>대표도서 저자</th>
+                <th>대표도서 출판사</th>
+                <th>대표도서 대여수량</th>
+                <th>연장 횟수</th>
+                <th>상태</th>
+                <th>대여 일시</th>
+                <th>반납 예정일</th>
+                <th>반납 일시</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book : ${borrows}">
+                <td th:text="${book.id}"></td>
+                <td th:text="${book.user.id}"></td>
+                <td th:text="${book.user.name}"></td>
+                <td th:text="${book.borrowBooks[0].book.bookInfo.isbn}"></td>
+                <td th:text="${book.borrowBooks[0].book.bookInfo.name}"></td>
+                <td th:text="${book.borrowBooks[0].book.bookInfo.author}"></td>
+                <td th:text="${book.borrowBooks[0].book.bookInfo.publisher}"></td>
+                <td th:text="${book.borrowBooks[0].count}"></td>
+                <td th:text="${book.borrowBooks[0].delayCnt}"></td>
+                <td th:text="${book.status}"></td>
+                <td th:text="${#temporals.format(book.borrowDate,'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${#temporals.format(book.borrowBooks[0].returnDate,'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:if="${book.status.name() == 'RETURN'}"
+                    th:text="${#temporals.format(returnBookDate,'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td>
+                    <a href="#"
+                        th:href="'javascript:delay('+${book.id}+')'"
+                        class="btn" style="background-color: blue; color: white;" >DELAY</a>
+                </td>
+                <td>
+                    <a th:if="${book.status.name() == 'BORROW'} or ${book.status.name() == 'DELAY'}"  href="#"
+                       th:href="'javascript:returnBook('+${book.id}+')'"
+                       class="btn btn-danger">RETURN</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+<script>
+ function returnBook(id) {
+    var form = document.createElement("form");
+    form.setAttribute("method", "post");
+    form.setAttribute("action", "/borrows/" + id + "/returnBook");
+    document.body.appendChild(form);
+    form.submit();
+ }
+
+ function delay(id){
+    var form = document.createElement("form");
+    form.setAttribute("method","post");
+    form.setAttribute("action", "/borrows/" + id + "/delay");
+    document.body.appendChild(form);
+    form.submit();
+ }
+</script>
+</html>

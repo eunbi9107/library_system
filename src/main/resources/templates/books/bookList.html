@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>ISBN</th>
+                <th>도서명</th>
+                <th>작가</th>
+                <th>출판사</th>
+                <th>대여 가능 수량</th>
+                <th>예약 현황</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="book, i : ${bookInfos}">
+                    <td th:text="${books[i.index].id}"></td>
+                    <td th:text="${book.isbn}"></td>
+                    <td th:text="${book.name}"></td>
+                    <td th:text="${book.author}"></td>
+                    <td th:text="${book.publisher}"></td>
+                    <td th:text="${books[i.index].stockQuantity}"></td>
+                    <td th:text="${books[i.index].reservationQuantity}"></td>
+                    <td>
+                        <a href="#" th:href="@{/books/{id}/edit (id=${books[i.index].id})}"
+                           class="btn btn-primary" role="button">수정</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>

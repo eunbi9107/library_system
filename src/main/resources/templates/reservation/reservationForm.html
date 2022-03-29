@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <form role="form" action="/reservation" method="post">
+        <div class="form-group">
+            <label for="user">대여회원</label>
+            <select name="userId" id="user" class="form-control">
+                <option value="">회원선택</option>
+                <option th:each="user : ${users}"
+                        th:value="${user.user_id}"
+                        th:text="${user.id}" />
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="book">도서명</label>
+            <select name="bookId" id="book" class="form-control">
+                <option value="">도서선택</option>
+                <option th:each="bookInfo,i : ${bookInfos}"
+                        th:value="${books[i.index].id}"
+                        th:text="${bookInfo.name}" />
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="count">예약 수량</label>
+            <input type="number" name="count" class="form-control" id="count"
+                   placeholder="예약 수량을 입력하세요">
+        </div>
+        <div></div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br/>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+</html>
