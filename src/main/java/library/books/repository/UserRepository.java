@@ -40,4 +40,10 @@ public class UserRepository {
                 User.class).setParameter("name", name).getResultList();
     }
 
+    /*중복 검사*/
+    public boolean existsById(String id){
+        List<User> users = em.createQuery("select u from User u ").getResultList();
+
+        return true;
+    }
 }
