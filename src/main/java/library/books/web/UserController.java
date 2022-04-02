@@ -44,10 +44,10 @@ public class UserController {
     public String create(@Valid UserForm form, Errors errors, BindingResult result, Model model){
 
         if(result.hasErrors()){
-            Map<String, String> validatorResult = userService.validateHandling(result);
-            for(String key : validatorResult.keySet()){
-                model.addAttribute(key, validatorResult.get(key));
-            }
+//            Map<String, String> validatorResult = userService.validateHandling(result);
+//            for(String key : validatorResult.keySet()){
+//                model.addAttribute(key, validatorResult.get(key));
+//            }
 
             return "users/createUserForm";
         }
