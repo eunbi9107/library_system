@@ -2,6 +2,7 @@ package library.books.web;
 
 import library.books.domain.User;
 import library.books.service.UserService;
+import library.books.validator.CheckEmailValidator;
 import library.books.validator.CheckUsernameValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,11 +24,13 @@ public class UserController {
 
     private final UserService userService;
     private final CheckUsernameValidator checkUsernameValidator;
+    private final CheckEmailValidator checkEmailValidator;
 
     /*커스텀 유효성 검증을 위해 추가*/
     @InitBinder
     public void validatorBinder(WebDataBinder binder){
         binder.addValidators(checkUsernameValidator);
+        binder.addValidators(checkEmailValidator);
     }
 
     @GetMapping(value = "/users/new")

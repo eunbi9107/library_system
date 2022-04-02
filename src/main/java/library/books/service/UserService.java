@@ -26,6 +26,8 @@ public class UserService {
     @Transactional
     public Long join(User user){
         validateDuplicateUser(user);
+        validateDuplicateEmail(user);
+
         userRepository.save(user);
         return user.getUser_id();
     }
@@ -36,6 +38,14 @@ public class UserService {
 
         if(!findUsers.isEmpty()){
             throw new IllegalStateException("이미 존재하는 회원입니다.");
+        }
+    }
+
+    private void validateDuplicateEmail(User user){
+        List<User> findUsers = userRepository.findByEmail(user.getEmail());
+
+        if(!findUsers.isEmpty()){
+            throw new IllegalStateException("이미 존재하는 이메일입니다.");
         }
     }
 
